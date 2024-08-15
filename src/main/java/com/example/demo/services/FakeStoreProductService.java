@@ -1,11 +1,11 @@
 package com.example.demo.services;
 
-import com.example.demo.dtos.CreateProductRequestDto;
-import com.example.demo.dtos.FakeStoreProductRequestDto;
-import com.example.demo.dtos.FakeStoreProductResponseDto;
-import com.example.demo.dtos.ProductRequestDto;
+import com.example.demo.dtos.*;
 import com.example.demo.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -55,5 +55,18 @@ public class FakeStoreProductService implements ProductService {
                 FakeStoreProductResponseDto.class
         );
         return responseDto.toProduct();
+    }
+
+    @Override
+    public Product partialUpdate(Long id, ProductRequestDto productRequestDto) {
+        CreateProductRequestDto createProductRequestDto = productRequestDto.toRequest();
+        HttpEntity<CreateProductRequestDto> createProductRequestDtoHttpEntity = new HttpEntity<>(createProductRequestDto);
+        ResponseEntity<FakeStoreProductResponseDto> responseEntity = restTemplate.exchange(
+                "https://fakestoreapi.com/products/"+ id,
+                HttpMethod.PATCH,
+                createProductRequestDtoHttpEntity, //expect HTTPEntry consit of header , body
+                FakeStoreProductResponseDto.class
+        );
+        return responseEntity.getBody().toProduct();
     }
 }

@@ -1,15 +1,14 @@
 package com.example.demo.controllers;
 
-import com.example.demo.dtos.CreateProductRequestDto;
-import com.example.demo.dtos.CreateProductResponseDto;
-import com.example.demo.dtos.ProductRequestDto;
-import com.example.demo.dtos.ProductResponseDto;
+import com.example.demo.dtos.*;
 import com.example.demo.models.Product;
 import com.example.demo.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.service.annotation.PatchExchange;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -49,6 +48,13 @@ public class ProductController {
         CreateProductResponseDto createProductResponseDto =  new CreateProductResponseDto();
         return createProductResponseDto.from(product);
 
+    }
+
+    @PatchExchange("/product/{id}")
+    public ResponseEntity<ProductResponseDto> partialUpdateProduct(@PathVariable Long id,@RequestBody ProductRequestDto productRequestDto){
+        Product product = productService.partialUpdate(id, productRequestDto);
+        ResponseEntity<ProductResponseDto> responseEntity =  new ResponseEntity<>(ProductResponseDto.from(product),HttpStatusCode.valueOf(200));
+        return responseEntity;
     }
     public void updateProduct(){}
     public void deleteProduct(){}

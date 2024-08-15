@@ -1,6 +1,5 @@
 package com.example.demo.services;
 
-import com.example.demo.dtos.CreateProductRequestDto;
 import com.example.demo.dtos.ProductRequestDto;
 import com.example.demo.models.Product;
 
@@ -18,4 +17,6 @@ public interface ProductService {
     // take all parameters or create a separate
     // take a product , to reduce parameters
     // can be use
+
+    Product partialUpdate(Long id, ProductRequestDto productRequestDto);
 }
