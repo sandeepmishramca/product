@@ -12,4 +12,14 @@ public class ProductRequestDto {
     private Double price;
     private String imageUrl;
     private String categoryName;
+
+    public CreateProductRequestDto toRequest() {
+        CreateProductRequestDto createProductRequestDto = new CreateProductRequestDto();
+        createProductRequestDto.setTitle(this.title);
+        createProductRequestDto.setDescription(this.description);
+        createProductRequestDto.setPrice(this.price);
+        createProductRequestDto.setImage(this.imageUrl);
+        createProductRequestDto.setCategory(this.categoryName);
+        return createProductRequestDto;
+    }
 }

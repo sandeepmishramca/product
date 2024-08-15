@@ -44,8 +44,8 @@ public class ProductController {
 
     // what kind of Request will be use to create add data it should be POST request
     @PostMapping("/product")
-    public CreateProductResponseDto createProduct(@RequestBody CreateProductRequestDto requestDto){
-        Product product=productService.createProduct(requestDto);
+    public CreateProductResponseDto createProduct(@RequestBody ProductRequestDto productRequestDto){
+        Product product=productService.createProduct(productRequestDto);
         CreateProductResponseDto createProductResponseDto =  new CreateProductResponseDto();
         return createProductResponseDto.from(product);
 

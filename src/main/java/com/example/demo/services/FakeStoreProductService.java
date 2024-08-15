@@ -3,6 +3,7 @@ package com.example.demo.services;
 import com.example.demo.dtos.CreateProductRequestDto;
 import com.example.demo.dtos.FakeStoreProductRequestDto;
 import com.example.demo.dtos.FakeStoreProductResponseDto;
+import com.example.demo.dtos.ProductRequestDto;
 import com.example.demo.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,13 +47,8 @@ public class FakeStoreProductService implements ProductService {
     }
 
     @Override
-    public Product createProduct(CreateProductRequestDto createProductRequestDto) {
-//        FakeStoreProductRequestDto requestDto = new FakeStoreProductRequestDto();
-//        requestDto.setTitle(createProductRequestDto.getTitle());
-//        requestDto.setDescription(createProductRequestDto.getDescription());
-//        requestDto.setPrice(createProductRequestDto.getPrice());
-//        requestDto.setImageUrl(createProductRequestDto.getImageUrl());
-//        requestDto.setCategoryName(createProductRequestDto.getCategoryName());
+    public Product createProduct(ProductRequestDto productRequestDto) {
+        CreateProductRequestDto createProductRequestDto=productRequestDto.toRequest();
         FakeStoreProductResponseDto responseDto=restTemplate.postForObject(
                 "https://fakestoreapi.com/products/",
                 createProductRequestDto,
