@@ -1,6 +1,7 @@
 package com.example.demo.services;
 
 import com.example.demo.dtos.*;
+import com.example.demo.exceptions.ProductNotFoundExcepton;
 import com.example.demo.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -13,8 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class FakeStoreProductService implements ProductService {
+public class FakeStoreProductService implements ProductService{
 
+    @Autowired
     private RestTemplate restTemplate;
 
     @Autowired
@@ -23,11 +25,14 @@ public class FakeStoreProductService implements ProductService {
     }
 
     @Override
-    public Product getProductById(Long id) {
+    public Product getProductById(Long id) throws ProductNotFoundExcepton {
         FakeStoreProductResponseDto responseDto = restTemplate.getForObject(
                 "https://fakestoreapi.com/products/" + id,
                 FakeStoreProductResponseDto.class
         );
+        if (responseDto == null) {
+            throw new ProductNotFoundExcepton("Product Not Found!");
+        }
         return responseDto.toProduct();
     }
 
@@ -69,4 +74,18 @@ public class FakeStoreProductService implements ProductService {
         );
         return responseEntity.getBody().toProduct();
     }
+
+    @Override
+    public Product deleteProduct(Long id) {
+        HttpEntity<Void> requestEnity = new HttpEntity<>(null);
+        ResponseEntity<FakeStoreProductResponseDto> responseEntity = restTemplate.exchange(
+                "https://fakestoreapi.com/products/"+ id,
+                HttpMethod.DELETE,
+                requestEnity, //expect HTTPEntry consit of header , body
+                FakeStoreProductResponseDto.class
+        );
+        return responseEntity.getBody().toProduct();
+    }
+
+
 }
