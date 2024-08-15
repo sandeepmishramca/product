@@ -9,12 +9,13 @@ import org.springframework.web.client.RestTemplate;
 public class RestTemplateConfiguration {
     @Bean
     public RestTemplate restTemplate() {
-        //return new RestTemplate();
-        RestTemplate restTemplate = new RestTemplate();
-        HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
-        requestFactory.setConnectTimeout(1000);
-////        requestFactory.setReadTimeout(1000);
-        restTemplate.setRequestFactory(requestFactory);
-        return restTemplate;
+        return new RestTemplate(new HttpComponentsClientHttpRequestFactory());
+
+//        RestTemplate restTemplate = new RestTemplate();
+//        HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
+//        requestFactory.setConnectTimeout(1000);
+//////        requestFactory.setReadTimeout(1000);
+//        restTemplate.setRequestFactory(requestFactory);
+//        return restTemplate;
     }
 }
