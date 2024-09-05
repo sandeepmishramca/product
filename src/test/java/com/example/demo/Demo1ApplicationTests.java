@@ -143,7 +143,6 @@ class Demo1ApplicationTests {
 //        System.out.println(categoryOptional.get().getProducts()); //access product
     }
 
-
     @Test
     @Transactional
     public void nPlusOneProblem(){

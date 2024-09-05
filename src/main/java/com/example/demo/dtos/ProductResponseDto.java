@@ -15,6 +15,10 @@ public class ProductResponseDto {
     private String categoryName;
 
     public static ProductResponseDto from(Product product) {
+        if (product == null){
+            return null;
+        }
+
         ProductResponseDto dto = new ProductResponseDto();
         dto.setId(product.getId());
         dto.setTitle(product.getTitle());
@@ -22,6 +26,11 @@ public class ProductResponseDto {
         dto.setPrice(product.getPrice());
         dto.setImageUrl(product.getImageUrl());
         dto.setCategoryName(product.getCategory().getName());
+//        if (product.getCategory() != null) {
+//            dto.setCategoryName(product.getCategory().getName());
+//        }else {
+//            dto.setCategoryName(null);
+//        }
         return dto;
     }
 }
