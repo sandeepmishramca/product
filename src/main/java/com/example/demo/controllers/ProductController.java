@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 
+import com.example.demo.commons.AuthenticationCommons;
 import com.example.demo.dtos.*;
 import com.example.demo.exceptions.ProductNotFoundExcepton;
 import com.example.demo.models.Product;
@@ -20,14 +21,26 @@ import java.util.List;
 public class ProductController {
 
     private ProductService productService;
+    private AuthenticationCommons authenticationCommons;
 
     @Autowired
-    public ProductController(@Qualifier("productDbService") ProductService productService) {
+    public ProductController(@Qualifier("productDbService") ProductService productService
+    , AuthenticationCommons authenticationCommons) {
         this.productService = productService;
+        this.authenticationCommons = authenticationCommons;
     }
 
     @GetMapping("/product/{id}")
-    public ProductResponseDto getProductById(@PathVariable("id") Long id) throws ProductNotFoundExcepton {
+    public ProductResponseDto getProductById(
+            @PathVariable("id") Long id,
+            @RequestHeader("Authorization") String token
+    ) throws ProductNotFoundExcepton {
+        //Integration for Autherization for access this api
+        UserDto userDto = authenticationCommons.validateToken(token);
+        if(userDto == null) {
+            throw new RuntimeException("Invalid token");//TODO: proper exception
+        }
+
         Product product = productService.getProductById(id);
         return ProductResponseDto.from(product);
     }

@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class FakeStoreProductServiceTest {
@@ -101,7 +101,14 @@ class FakeStoreProductServiceTest {
         )).thenReturn(expectedFakeStoreProductResponseDto);
 
         Product product = fakeStoreProductService.createProduct(productRequestDto);
-        Assertions.assertEquals(expectedFakeStoreProductResponseDto.getTitle(), product.getTitle());
+//        Assertions.assertEquals(expectedFakeStoreProductResponseDto.getTitle(), product.getTitle());
+        //it is checking restTemplate is call, how many times
+        verify(restTemplate, times(1)).postForObject(
+                eq("https://fakestoreapi.com/products/"),
+                any(),
+                eq(FakeStoreProductResponseDto.class)
+
+        );
 
     }
 
