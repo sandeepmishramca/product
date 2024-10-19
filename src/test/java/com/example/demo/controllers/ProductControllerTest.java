@@ -31,7 +31,8 @@ class ProductControllerTest {
     public void testGetProductByIdProductIsNull() throws ProductNotFoundExcepton {
         when(productService.getProductById(anyLong())).thenReturn(null);
 
-        ProductResponseDto productResponseDto = productController.getProductById(1L,"xyz");
+//        ProductResponseDto productResponseDto = productController.getProductById(1L,"xyz");
+        ProductResponseDto productResponseDto = productController.getProductById(1L);
         Assertions.assertNull(productResponseDto);
     }
 
@@ -52,8 +53,8 @@ class ProductControllerTest {
 
         when(productService.getProductById(anyLong())).thenReturn(expectedProduct);
 
-        ProductResponseDto actual = productController.getProductById(1L,"xyz");
-
+//        ProductResponseDto actual = productController.getProductById(1L,"xyz");
+        ProductResponseDto actual = productController.getProductById(1L);
         System.out.println("DEBUG");
         Assertions.assertNull(actual);
         Assertions.assertNotNull(actual);
@@ -80,8 +81,8 @@ class ProductControllerTest {
 
         when(productService.getProductById(anyLong())).thenReturn(expectedProduct);
 
-        ProductResponseDto actual = productController.getProductById(1L,"xyz");
-
+//        ProductResponseDto actual = productController.getProductById(1L,"xyz");
+        ProductResponseDto actual = productController.getProductById(1L);
         Assertions.assertEquals(expectedProduct.getCategory().getName(), actual.getCategoryName());
 
     }

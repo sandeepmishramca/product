@@ -4,6 +4,7 @@ import com.example.demo.dtos.*;
 import com.example.demo.exceptions.ProductNotFoundExcepton;
 import com.example.demo.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service("fakeStoreProductService")
 public class FakeStoreProductService implements ProductService{
@@ -20,12 +22,23 @@ public class FakeStoreProductService implements ProductService{
     private RestTemplate restTemplate;
 
     @Autowired
-    public FakeStoreProductService(RestTemplate restTemplate) {
-        this.restTemplate = new RestTemplate();
+    private RedisTemplate<String, Object> redisTemplate;
+
+    @Autowired
+    public FakeStoreProductService(
+            RestTemplate restTemplate,
+            RedisTemplate<String, Object> redisTemplate
+    ) {
+        this.restTemplate = restTemplate;
+        this.redisTemplate = redisTemplate;
     }
 
     @Override
     public Product getProductById(Long id) throws ProductNotFoundExcepton {
+        Product productFromCache = (Product) redisTemplate.opsForValue().get(String.valueOf(id));
+        if(productFromCache != null) {
+            return productFromCache;
+        }
         FakeStoreProductResponseDto responseDto = restTemplate.getForObject(
                 "https://fakestoreapi.com/products/" + id,
                 FakeStoreProductResponseDto.class
@@ -33,7 +46,10 @@ public class FakeStoreProductService implements ProductService{
         if (responseDto == null) {
             throw new ProductNotFoundExcepton("Product Not Found!");
         }
-        return responseDto.toProduct();
+
+        Product product = responseDto.toProduct();
+        redisTemplate.opsForValue().set(String.valueOf(id), product);
+        return product;
     }
 
     @Override

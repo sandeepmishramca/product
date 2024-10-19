@@ -2,6 +2,8 @@ package com.example.demo.repositories;
 
 import com.example.demo.models.Category;
 import com.example.demo.models.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -39,5 +41,6 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
 //    @Query(value = "select * from Product p join Category c on p.category_id=c.id", nativeQuery = true)
 //    List<Product> getProductBasedOnCategoryNameUsingSQLQuery();
 //
+    Page<Product> findByTitleContaining(String title, Pageable pageable);
 
 }

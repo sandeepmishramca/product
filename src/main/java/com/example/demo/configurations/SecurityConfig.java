@@ -13,13 +13,29 @@ import static org.springframework.security.oauth2.core.authorization.OAuth2Autho
 @EnableWebSecurity
 public class SecurityConfig {
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    // this method will applicable when you want to implement OAUTH
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http
+//                .authorizeHttpRequests(authorize -> authorize
+//                        .requestMatchers("/product").access(hasScope("USEREMAIL"))
+//                        .anyRequest().authenticated()
+//                )
+//                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
+//        return http.build();
+//    }
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/product").access(hasScope("USEREMAIL"))
-                        .anyRequest().authenticated()
-                )
-                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
+                .authorizeHttpRequests((requests) -> {
+                            try {
+                                requests
+                                        .anyRequest().permitAll()
+                                        .and().cors().disable()
+                                        .csrf().disable();
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                );
         return http.build();
     }
 }
